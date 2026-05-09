@@ -10,6 +10,7 @@ import SwiftUI
 @main
 struct SoundVerseApp: App {
     @StateObject private var notificationManager = NotificationManager.shared
+    @StateObject private var playerManager = MusicPlayerManager.shared
     @State private var showMenu = false
 
     var body: some Scene {
@@ -17,6 +18,7 @@ struct SoundVerseApp: App {
             ZStack {
                 HomeView(showMenu: $showMenu)
                     .environmentObject(notificationManager)
+                    .environmentObject(playerManager)
                 SideMenuView(isShowing: $showMenu)
             }
             .gesture(

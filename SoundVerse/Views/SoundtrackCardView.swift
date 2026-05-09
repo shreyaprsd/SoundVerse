@@ -2,8 +2,7 @@ import SwiftUI
 
 struct SoundtrackCardView: View {
     let track: Track
-    @Binding var isPlaying: Bool
-    var progress: Double = 0.18
+    @ObservedObject var playerManager: MusicPlayerManager
 
     private let cardColor = Color(red: 0.11, green: 0.09, blue: 0.20)
     private let artColor = Color(red: 0.11, green: 0.09, blue: 0.20)
@@ -55,17 +54,17 @@ struct SoundtrackCardView: View {
                     .foregroundColor(.gray)
             }
             Spacer()
-            Button { isPlaying.toggle() } label: {
+            Button { playerManager.toggle() } label: {
                 Circle()
                     .fill(purple)
                     .frame(width: 52, height: 52)
                     .overlay(
-                        Image(systemName: isPlaying ? "pause.fill" : "play.fill")
+                        Image(systemName: playerManager.isPlaying ? "pause.fill" : "play.fill")
                             .foregroundColor(.white)
                             .font(.system(size: 20))
                     )
             }
-            .accessibilityLabel(isPlaying ? "Pause" : "Play")
+            .accessibilityLabel(playerManager.isPlaying ? "Pause" : "Play")
         }
     }
 
@@ -78,13 +77,13 @@ struct SoundtrackCardView: View {
                         .frame(height: 3)
                     Capsule()
                         .fill(purple)
-                        .frame(width: geo.size.width * progress, height: 3)
+                        .frame(width: geo.size.width * playerManager.progress, height: 3)
                 }
             }
             .frame(height: 3)
 
             HStack {
-                Text("0:24")
+                Text(playerManager.elapsedTime)
                 Spacer()
                 Text(track.duration)
             }
@@ -97,7 +96,7 @@ struct SoundtrackCardView: View {
 
 #Preview {
     SoundtrackCardView(
-        track: Track(title: "Dinner & Diatribes", artist: "Hozier", duration: "3:43"),
-        isPlaying: .constant(false)
+        track: Track(title: "Piano", artist: "Pixabay", duration: "3:43"),
+        playerManager: MusicPlayerManager.shared
     )
 }

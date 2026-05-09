@@ -2,8 +2,8 @@ import SwiftUI
 
 struct HomeView: View {
     @EnvironmentObject var notificationManager: NotificationManager
+    @EnvironmentObject var playerManager: MusicPlayerManager
     @Binding var showMenu: Bool
-    @State private var isPlaying = false
     @State private var showNotifications = false
     @State private var notificationPermissionError: String?
 
@@ -18,10 +18,6 @@ struct HomeView: View {
         coverImageName: "coverImage"
     )
 
-    init(showMenu: Binding<Bool>) {
-        self._showMenu = showMenu
-    }
-
     var body: some View {
         ZStack {
             NavigationStack {
@@ -30,7 +26,7 @@ struct HomeView: View {
 
                     VStack {
                         Spacer()
-                        SoundtrackCardView(track: track, isPlaying: $isPlaying)
+                        SoundtrackCardView(track: track, playerManager: playerManager)
                             .padding(.horizontal, 20)
                         Spacer()
                     }
@@ -69,6 +65,9 @@ struct HomeView: View {
             }
             .background(bgColor.ignoresSafeArea())
         }
+        .onAppear {
+            playerManager.load(fileName: track.audioFileName)
+        }
         .alert(item: $notificationManager.pendingAlert) { alert in
             Alert(
                 title: Text(alert.title),
@@ -93,4 +92,5 @@ struct HomeView: View {
 #Preview {
     HomeView(showMenu: .constant(false))
         .environmentObject(NotificationManager.shared)
+        .environmentObject(MusicPlayerManager.shared)
 }
