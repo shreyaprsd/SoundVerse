@@ -9,9 +9,15 @@ import SwiftUI
 
 @main
 struct SoundVerseApp: App {
+    @StateObject private var notificationManager = NotificationManager.shared
+
     var body: some Scene {
         WindowGroup {
             HomeView()
+                .environmentObject(notificationManager)
+                .task {
+                    notificationManager.requestPermission()
+                }
         }
     }
 }

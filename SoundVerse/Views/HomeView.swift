@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct HomeView: View {
+    @EnvironmentObject var notificationManager: NotificationManager
     @State private var isPlaying = false
     @State private var showMenu = false
     @State private var showNotifications = false
@@ -17,41 +18,55 @@ struct HomeView: View {
     )
 
     var body: some View {
-        NavigationStack {
-            ZStack {
-                bgColor.ignoresSafeArea()
+        ZStack {
+            NavigationStack {
+                ZStack {
+                    bgColor.ignoresSafeArea()
 
-                VStack {
-                    Spacer()
-                    SoundtrackCardView(track: track, isPlaying: $isPlaying)
-                        .padding(.horizontal, 20)
-                    Spacer()
+                    VStack {
+                        Spacer()
+                        SoundtrackCardView(track: track, isPlaying: $isPlaying)
+                            .padding(.horizontal, 20)
+                        Spacer()
+                    }
+                }
+                .navigationTitle("SoundVerse")
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbarColorScheme(.dark, for: .navigationBar)
+                .navigationDestination(isPresented: $showNotifications) {
+                    NotificationsView()
+                }
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        Button { showMenu = true } label: {
+                            Image(systemName: "person.fill")
+                                .font(.system(size: 16))
+                        }
+                        .accessibilityLabel("Open profile menu")
+                    }
+
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button { showNotifications = true } label: {
+                            Image(systemName: "bell.fill")
+                                .font(.system(size: 16))
+                        }
+                        .accessibilityLabel("Open notifications")
+                    }
                 }
             }
-            .navigationTitle("SoundVerse")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbarColorScheme(.dark, for: .navigationBar)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button { showMenu = true } label: {
-                        Image(systemName: "person.fill")
-                            .font(.system(size: 16))
-                    }
-                    .accessibilityLabel("Open profile menu")
-                }
-
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button { showNotifications = true } label: {
-                        Image(systemName: "bell.fill")
-                            .font(.system(size: 16))
-                    }
-                    .accessibilityLabel("Open notifications")
-                }
-            }
+            .background(bgColor.ignoresSafeArea())
+        }
+        .alert(item: $notificationManager.pendingAlert) { alert in
+            Alert(
+                title: Text(alert.title),
+                message: Text(alert.body),
+                dismissButton: .default(Text("OK"))
+            )
         }
     }
 }
 
 #Preview {
     HomeView()
+        .environmentObject(NotificationManager.shared)
 }
