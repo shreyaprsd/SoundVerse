@@ -5,13 +5,14 @@ struct HomeView: View {
     @State private var isPlaying = false
     @State private var showMenu = false
     @State private var showNotifications = false
+    @State private var notificationPermissionError: String?
 
     private let bgColor = Color(red: 0.06, green: 0.05, blue: 0.12)
     private let purple = Color(red: 0.42, green: 0.27, blue: 0.87)
 
     private let track = Track(
-        title: "Dinner & Diatribes",
-        artist: "Hozier",
+        title: "Piano",
+        artist: "Pixabay",
         duration: "2:10",
         audioFileName: "audiotrack.mp3",
         coverImageName: "coverImage"
@@ -46,7 +47,15 @@ struct HomeView: View {
                     }
 
                     ToolbarItem(placement: .navigationBarTrailing) {
-                        Button { showNotifications = true } label: {
+                        Button {
+                            notificationManager.checkAndRequest { granted, errorMessage in
+                                if granted {
+                                    showNotifications = true
+                                } else {
+                                    notificationPermissionError = errorMessage
+                                }
+                            }
+                        } label: {
                             Image(systemName: "bell.fill")
                                 .font(.system(size: 16))
                         }
@@ -62,6 +71,17 @@ struct HomeView: View {
                 message: Text(alert.body),
                 dismissButton: .default(Text("OK"))
             )
+        }
+        .alert(
+            "Notifications Unavailable",
+            isPresented: Binding(
+                get: { notificationPermissionError != nil },
+                set: { if !$0 { notificationPermissionError = nil } }
+            )
+        ) {
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text(notificationPermissionError ?? "")
         }
     }
 }

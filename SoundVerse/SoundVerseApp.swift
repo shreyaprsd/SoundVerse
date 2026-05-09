@@ -15,9 +15,6 @@ struct SoundVerseApp: App {
         WindowGroup {
             HomeView()
                 .environmentObject(notificationManager)
-                .task {
-                    notificationManager.requestPermission()
-                }
         }
     }
 }

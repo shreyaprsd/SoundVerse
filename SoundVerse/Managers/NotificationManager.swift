@@ -13,12 +13,34 @@ class NotificationManager: NSObject, ObservableObject {
         UNUserNotificationCenter.current().delegate = self
     }
 
-    func requestPermission() {
-        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
-            DispatchQueue.main.async { self.isAuthorized = granted }
-
-            if let error {
-                print("Notification permission error: \(error.localizedDescription)")
+    // completion: (granted, errorMessage)
+    // errorMessage is non-nil when permission is denied or a system error occurred
+    func checkAndRequest(completion: @escaping (Bool, String?) -> Void) {
+        UNUserNotificationCenter.current().getNotificationSettings { settings in
+            switch settings.authorizationStatus {
+            case .authorized, .provisional, .ephemeral:
+                DispatchQueue.main.async {
+                    self.isAuthorized = true
+                    completion(true, nil)
+                }
+            case .notDetermined:
+                UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
+                    DispatchQueue.main.async {
+                        self.isAuthorized = granted
+                        if let error {
+                            completion(false, error.localizedDescription)
+                        } else {
+                            completion(granted, granted ? nil : "Notifications were denied.")
+                        }
+                    }
+                }
+            case .denied:
+                DispatchQueue.main.async {
+                    self.isAuthorized = false
+                    completion(false, "Notifications are disabled. Please enable them in Settings → SoundVerse → Notifications.")
+                }
+            @unknown default:
+                DispatchQueue.main.async { completion(false, "Unable to determine notification permission status.") }
             }
         }
     }
