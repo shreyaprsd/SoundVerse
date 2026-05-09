@@ -7,6 +7,7 @@ class MusicPlayerManager: ObservableObject {
     @Published var isPlaying = false
     @Published var progress: Double = 0
     @Published var elapsedTime: String = "0:00"
+    @Published var durationText: String = "0:00"
 
     private var player: AVAudioPlayer?
     private var timer: AnyCancellable?
@@ -24,6 +25,7 @@ class MusicPlayerManager: ObservableObject {
             try AVAudioSession.sharedInstance().setActive(true)
             player = try AVAudioPlayer(contentsOf: url)
             player?.prepareToPlay()
+            durationText = format(player?.duration ?? 0)
         } catch {
             print("MusicPlayerManager: failed to load player — \(error.localizedDescription)")
         }
@@ -35,6 +37,9 @@ class MusicPlayerManager: ObservableObject {
             player.pause()
             stopTimer()
         } else {
+            if player.currentTime >= player.duration {
+                resetPlayback()
+            }
             player.play()
             startTimer()
         }
@@ -42,6 +47,7 @@ class MusicPlayerManager: ObservableObject {
     }
 
     private func startTimer() {
+        stopTimer()
         timer = Timer.publish(every: 0.5, on: .main, in: .common)
             .autoconnect()
             .sink { [weak self] _ in
@@ -61,10 +67,24 @@ class MusicPlayerManager: ObservableObject {
         progress = player.currentTime / duration
         elapsedTime = format(player.currentTime)
 
+        if player.currentTime >= duration {
+            resetPlayback()
+            return
+        }
+
         if !player.isPlaying {
             isPlaying = false
             stopTimer()
         }
+    }
+
+    private func resetPlayback() {
+        player?.stop()
+        player?.currentTime = 0
+        progress = 0
+        elapsedTime = "0:00"
+        isPlaying = false
+        stopTimer()
     }
 
     private func format(_ seconds: TimeInterval) -> String {

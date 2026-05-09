@@ -85,7 +85,7 @@ struct SoundtrackCardView: View {
             HStack {
                 Text(playerManager.elapsedTime)
                 Spacer()
-                Text(track.duration)
+                Text(playerManager.durationText)
             }
             .font(.system(size: 11))
             .foregroundColor(.gray)

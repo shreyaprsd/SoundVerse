@@ -15,23 +15,31 @@ struct SoundVerseApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ZStack {
-                HomeView(showMenu: $showMenu)
-                    .environmentObject(notificationManager)
-                    .environmentObject(playerManager)
-                SideMenuView(isShowing: $showMenu)
+            GeometryReader { proxy in
+                let menuWidth = proxy.size.width * 0.75
+
+                ZStack {
+                    HomeView(showMenu: $showMenu)
+                        .environmentObject(notificationManager)
+                        .environmentObject(playerManager)
+                    SideMenuView(isShowing: $showMenu)
+                }
+                .gesture(
+                    DragGesture()
+                        .onEnded { value in
+                            if value.startLocation.x < 30, value.translation.width > 80 {
+                                withAnimation(.easeInOut(duration: 0.3)) { showMenu = true }
+                            }
+
+                            if showMenu,
+                               value.startLocation.x <= menuWidth,
+                               value.translation.width < -80
+                            {
+                                withAnimation(.easeInOut(duration: 0.3)) { showMenu = false }
+                            }
+                        }
+                )
             }
-            .gesture(
-                DragGesture()
-                    .onEnded { value in
-                        if value.startLocation.x < 30, value.translation.width > 80 {
-                            withAnimation(.easeInOut(duration: 0.3)) { showMenu = true }
-                        }
-                        if value.translation.width < -80 {
-                            withAnimation(.easeInOut(duration: 0.3)) { showMenu = false }
-                        }
-                    }
-            )
         }
     }
 }
