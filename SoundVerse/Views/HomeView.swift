@@ -2,8 +2,8 @@ import SwiftUI
 
 struct HomeView: View {
     @EnvironmentObject var notificationManager: NotificationManager
+    @Binding var showMenu: Bool
     @State private var isPlaying = false
-    @State private var showMenu = false
     @State private var showNotifications = false
     @State private var notificationPermissionError: String?
 
@@ -17,6 +17,10 @@ struct HomeView: View {
         audioFileName: "audiotrack.mp3",
         coverImageName: "coverImage"
     )
+
+    init(showMenu: Binding<Bool>) {
+        self._showMenu = showMenu
+    }
 
     var body: some View {
         ZStack {
@@ -87,6 +91,6 @@ struct HomeView: View {
 }
 
 #Preview {
-    HomeView()
+    HomeView(showMenu: .constant(false))
         .environmentObject(NotificationManager.shared)
 }
