@@ -1,10 +1,10 @@
 # SoundVerse
 
-SoundVerse is a SwiftUI iOS assignment project inspired by the Soundverse app experience. The goal is to build a simple, music-focused prototype with a home screen, a profile side menu, a notification flow, and basic audio playback.
+SoundVerse is a SwiftUI iOS assignment project inspired by the Soundverse app experience. 
 
 ## Project Requirements
 
-The app  demonstrate these main interactions:
+The app  demonstrates these main interactions:
 
 - A Soundverse-style home screen with a soundtrack preview.
 - A profile/menu button on the top left.
