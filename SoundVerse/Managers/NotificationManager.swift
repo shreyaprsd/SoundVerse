@@ -68,7 +68,7 @@ class NotificationManager: NSObject, ObservableObject {
     }
 
     func scheduleDelayedNotification() {
-        let payload = dummyPayloads.randomElement()!
+        guard let payload = dummyPayloads.randomElement() else { return }
         let content = UNMutableNotificationContent()
         content.title = payload.title
         content.body = payload.body

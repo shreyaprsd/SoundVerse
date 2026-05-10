@@ -7,15 +7,11 @@ struct HomeView: View {
     @State private var showNotifications = false
     @State private var notificationPermissionError: String?
 
-    private let bgColor = Color(red: 0.06, green: 0.05, blue: 0.12)
-    private let purple = Color(red: 0.42, green: 0.27, blue: 0.87)
+    private let bgColor = Color.soundVerseBackground
 
     private let track = Track(
         title: "Piano",
-        artist: "Pixabay",
-        duration: "2:10",
-        audioFileName: "audiotrack.mp3",
-        coverImageName: "coverImage"
+        artist: "Pixabay"
     )
 
     var body: some View {
@@ -66,7 +62,7 @@ struct HomeView: View {
             .background(bgColor.ignoresSafeArea())
         }
         .onAppear {
-            playerManager.load(fileName: track.audioFileName)
+            playerManager.load(fileName: "audiotrack.mp3")
         }
         .alert(item: $notificationManager.pendingAlert) { alert in
             Alert(

@@ -3,9 +3,9 @@ import SwiftUI
 struct ChatView: View {
     let notification: NotificationItem
     @State private var messages: [ChatMessage]
-    private let bgColor = Color(red: 0.06, green: 0.05, blue: 0.12)
-    private let purple = Color(red: 0.42, green: 0.27, blue: 0.87)
-    private let incomingBubble = Color(red: 0.11, green: 0.09, blue: 0.20)
+    private let bgColor = Color.soundVerseBackground
+    private let purple = Color.soundVersePurple
+    private let incomingBubble = Color.soundVerseCard
 
     init(notification: NotificationItem) {
         self.notification = notification
@@ -56,7 +56,7 @@ struct ChatBubble: View {
             VStack(alignment: message.isFromUser ? .trailing : .leading, spacing: 3) {
                 Text(message.text)
                     .font(.system(size: 15))
-                    .foregroundColor(.white)
+                    .foregroundStyle(.white)
                     .padding(.horizontal, 14)
                     .padding(.vertical, 10)
                     .background(
@@ -66,7 +66,7 @@ struct ChatBubble: View {
 
                 Text(message.timestamp)
                     .font(.system(size: 11))
-                    .foregroundColor(.gray)
+                    .foregroundStyle(.gray)
                     .padding(.horizontal, 4)
             }
 

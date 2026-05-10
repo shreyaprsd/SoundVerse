@@ -4,9 +4,8 @@ struct SoundtrackCardView: View {
     let track: Track
     @ObservedObject var playerManager: MusicPlayerManager
 
-    private let cardColor = Color(red: 0.11, green: 0.09, blue: 0.20)
-    private let artColor = Color(red: 0.11, green: 0.09, blue: 0.20)
-    private let purple = Color(red: 0.42, green: 0.27, blue: 0.87)
+    private let cardColor = Color.soundVerseCard
+    private let purple = Color.soundVersePurple
 
     var body: some View {
         VStack(spacing: 16) {
@@ -30,7 +29,7 @@ struct SoundtrackCardView: View {
 
                 Image(systemName: "music.note")
                     .font(.system(size: 52, weight: .light))
-                    .foregroundColor(.white)
+                    .foregroundStyle(.white)
                     .offset(y: -16)
             } else {
                 Image(track.coverImageName)
@@ -40,7 +39,7 @@ struct SoundtrackCardView: View {
             }
         }
         .frame(maxWidth: .infinity, minHeight: 200, maxHeight: 200)
-        .background(RoundedRectangle(cornerRadius: 24).fill(artColor))
+        .background(RoundedRectangle(cornerRadius: 24).fill(cardColor))
     }
 
     private var trackInfo: some View {
@@ -48,10 +47,10 @@ struct SoundtrackCardView: View {
             VStack(alignment: .leading, spacing: 4) {
                 Text(track.title)
                     .font(.system(size: 18, weight: .bold))
-                    .foregroundColor(.white)
+                    .foregroundStyle(.white)
                 Text(track.artist)
                     .font(.system(size: 13))
-                    .foregroundColor(.gray)
+                    .foregroundStyle(.gray)
             }
             Spacer()
             Button { playerManager.toggle() } label: {
@@ -60,7 +59,7 @@ struct SoundtrackCardView: View {
                     .frame(width: 52, height: 52)
                     .overlay(
                         Image(systemName: playerManager.isPlaying ? "pause.fill" : "play.fill")
-                            .foregroundColor(.white)
+                            .foregroundStyle(.white)
                             .font(.system(size: 20))
                     )
             }
@@ -88,7 +87,7 @@ struct SoundtrackCardView: View {
                 Text(playerManager.durationText)
             }
             .font(.system(size: 11))
-            .foregroundColor(.gray)
+            .foregroundStyle(.gray)
         }
         .padding(.horizontal, 12)
     }
@@ -96,7 +95,7 @@ struct SoundtrackCardView: View {
 
 #Preview {
     SoundtrackCardView(
-        track: Track(title: "Piano", artist: "Pixabay", duration: "3:43"),
+        track: Track(title: "Piano", artist: "Pixabay"),
         playerManager: MusicPlayerManager.shared
     )
 }

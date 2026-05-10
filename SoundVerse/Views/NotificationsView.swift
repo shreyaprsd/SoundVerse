@@ -3,9 +3,9 @@ import SwiftUI
 struct NotificationsView: View {
     @EnvironmentObject var notificationManager: NotificationManager
 
-    private let bgColor = Color(red: 0.06, green: 0.05, blue: 0.12)
-    private let cardColor = Color(red: 0.11, green: 0.09, blue: 0.20)
-    private let purple = Color(red: 0.42, green: 0.27, blue: 0.87)
+    private let bgColor = Color.soundVerseBackground
+    private let cardColor = Color.soundVerseCard
+    private let purple = Color.soundVersePurple
 
     var body: some View {
         ZStack {
@@ -41,7 +41,7 @@ struct NotificationsView: View {
 
 struct NotificationRow: View {
     let item: NotificationItem
-    private let purple = Color(red: 0.42, green: 0.27, blue: 0.87)
+    private let purple = Color.soundVersePurple
 
     var body: some View {
         HStack(spacing: 12) {
@@ -50,7 +50,7 @@ struct NotificationRow: View {
                     .fill(purple.opacity(0.2))
                     .frame(width: 46, height: 46)
                 Image(systemName: item.avatarSymbol)
-                    .foregroundColor(purple)
+                    .foregroundStyle(purple)
                     .font(.system(size: 20))
             }
 
@@ -58,7 +58,7 @@ struct NotificationRow: View {
                 HStack(spacing: 6) {
                     Text(item.username)
                         .font(.system(size: 14, weight: .semibold))
-                        .foregroundColor(.white)
+                        .foregroundStyle(.white)
                     if item.isUnread {
                         Circle()
                             .fill(purple)
@@ -67,11 +67,11 @@ struct NotificationRow: View {
                 }
                 Text(item.message)
                     .font(.system(size: 13))
-                    .foregroundColor(.gray)
+                    .foregroundStyle(.gray)
                     .lineLimit(2)
                 Text(item.time)
                     .font(.system(size: 11))
-                    .foregroundColor(Color.gray.opacity(0.6))
+                    .foregroundStyle(Color.gray.opacity(0.6))
             }
 
             Spacer()

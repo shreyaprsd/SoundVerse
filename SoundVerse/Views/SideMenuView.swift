@@ -3,19 +3,14 @@ import SwiftUI
 struct SideMenuView: View {
     @Binding var isShowing: Bool
 
-    private let bgColor = Color(red: 0.08, green: 0.06, blue: 0.14)
-    private let purple = Color(red: 0.42, green: 0.27, blue: 0.87)
-    private let rowColor = Color(red: 0.11, green: 0.09, blue: 0.20)
+    private let bgColor = Color.soundVerseMenuBackground
+    private let purple = Color.soundVersePurple
 
     private let menuItems: [(icon: String, label: String)] = [
         ("questionmark.circle.fill", "Help"),
         ("music.note.list", "Library"),
         ("gearshape.fill", "Settings"),
     ]
-
-    init(isShowing: Binding<Bool>) {
-        self._isShowing = isShowing
-    }
 
     var body: some View {
         GeometryReader { proxy in
@@ -66,10 +61,10 @@ struct SideMenuView: View {
             HStack(spacing: 10) {
                 Image(systemName: "rectangle.portrait.and.arrow.right")
                     .font(.system(size: 16))
-                    .foregroundColor(.gray)
+                    .foregroundStyle(.gray)
                 Text("Sign Out")
                     .font(.system(size: 15))
-                    .foregroundColor(.gray)
+                    .foregroundStyle(.gray)
             }
             .padding(.horizontal, 24)
             .padding(.bottom, 40)
@@ -83,17 +78,17 @@ struct SideMenuView: View {
                 .frame(width: 54, height: 54)
                 .overlay(
                     Image(systemName: "person.fill")
-                        .foregroundColor(purple)
+                        .foregroundStyle(purple)
                         .font(.system(size: 22))
                 )
 
             VStack(alignment: .leading, spacing: 3) {
-                Text("Shreya ")
+                Text("Shreya")
                     .font(.system(size: 16, weight: .semibold))
-                    .foregroundColor(.white)
+                    .foregroundStyle(.white)
                 Text("@indie_blue")
                     .font(.system(size: 13))
-                    .foregroundColor(.gray)
+                    .foregroundStyle(.gray)
             }
         }
     }
@@ -105,23 +100,22 @@ struct SideMenuView: View {
             HStack(spacing: 14) {
                 Image(systemName: icon)
                     .font(.system(size: 16))
-                    .foregroundColor(purple)
+                    .foregroundStyle(purple)
                     .frame(width: 24)
                 Text(label)
                     .font(.system(size: 15, weight: .medium))
-                    .foregroundColor(.white)
+                    .foregroundStyle(.white)
                 Spacer()
             }
             .padding(.horizontal, 12)
             .padding(.vertical, 14)
-
         }
     }
 }
 
 #Preview {
     ZStack {
-        Color(red: 0.06, green: 0.05, blue: 0.12).ignoresSafeArea()
+        Color.soundVerseBackground.ignoresSafeArea()
         SideMenuView(isShowing: .constant(true))
     }
 }
